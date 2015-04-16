@@ -1,0 +1,16 @@
+
+<!-- from show.ejs file -->
+<% include ../partials/header %>
+
+<h6 class="header">A place for families to find parks and playgrounds in Seattle</h6>
+
+<h1>This page will show the profile of one park</h1>
+
+<a href="parks/<%= data[0].id %>"><<%= data[0].name %></a>
+<%= data[0].address %>
+<%= data[0].website %>
+
+<% include ../partials/footer %>
+
+
+<!-- from  -->

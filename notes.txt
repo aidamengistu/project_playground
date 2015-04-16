@@ -1,0 +1,13 @@
+
+
+
+
+Alter time columns for default value
+
+alter table features alter column "createdAt" set default current_timestamp;
+alter table features alter column "updatedAt" set default current_timestamp;
+
+
+Query to import csv data
+
+COPY features ("feature","name","address","website","longitude","latitude","location")  FROM '/Users/aidamengistu/WDI_Seattle/project_playground/features.csv' DELIMITER ',' CSV HEADER;

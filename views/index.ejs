@@ -1,0 +1,52 @@
+<% include partials/header %>
+
+<div class = "row">
+</div>
+<div class="col-md-8">
+  <div class = "row">
+    <div class="frontPageImage">
+      <img src="images/volunteerpark.jpg"  />
+      <img src="images/northacres.jpg"  />
+      <img src="images/rosspark.jpg"  />
+      <img src="images/mapleleaf.jpg"  />
+
+    </div>
+  </div>
+</div>
+<br>
+
+<div class="col-md-4">
+
+  <div class="row">
+    <h4>Search by feature:</h4>
+    <form role="search" action="/parks" method="get">
+      <ul class = "filters" style="overflow:auto">
+        <% for (var i = 0; i < data.length; i++){  %>
+        <li><label class="chk"><input type="checkbox" name="type" value="<%= data[i].id %>"><%= data[i].feature %></label></li>
+        <% } %>
+      </ul>
+      <div class="row">
+        <input type="submit" class="btn btn" id="submitbtn1" value="Search">
+      </div>
+    </form>
+  </div>
+  <hr>
+
+  <div class="row">
+    <h4>Or search by name:</h4>
+    <form role="search" class ="parksearch" action="/parks" method="get">
+      <input type="text" class="form-control" id="searchfield" placeholder="Enter a park name" name="parkname">
+      <input type="submit" class="btn btn" id="submitbtn" value="Search">
+    </form>
+  </div>
+
+
+</div>
+
+</div>
+</div>
+
+<br>
+
+
+<% include partials/footer %>

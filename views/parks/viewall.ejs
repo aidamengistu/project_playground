@@ -1,0 +1,39 @@
+<% include ../partials/header %>
+
+<h1>All parks and playgrounds in Seattle</h1>
+
+<br>
+<div class = "row">
+</div>
+<div class="col-md-6">
+  <div class = "row">
+    <ul class="parklist" style="overflow:auto">
+      <% for (var i = 0; i < data.length; i++){  %>
+      <li class="parkname"><%= data[i].name %></li>
+      <li><%= data[i].address %></li>
+
+      <hr>
+      <% } %>
+
+    </ul>
+  </div>
+</div>
+
+<div class="col-md-6">
+  <div class ="row">
+
+    <div id='map'></div>
+  </div>
+</div>
+
+<script>
+  var myPoints = <%- JSON.stringify(data) %>;
+  drawMap(myPoints)
+</script>
+
+</div>
+</div>
+
+<br>
+
+<% include ../partials/footer %>

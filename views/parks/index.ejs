@@ -1,0 +1,36 @@
+<% include ../partials/header %>
+
+<br>
+<div class = "row">
+</div>
+<div class="col-md-6">
+  <div class = "row">
+    <ul class="parklist" style="overflow:auto">
+      <% for (var i = 0; i < parks.length; i++){  %>
+      <li class="parkname"><%= i + 1 + '. ' %><a href="/parks/<%=parks[i].id%>"><%= parks[i].name %></a></li>
+      <li><%= parks[i].address %></li>
+      <li class="features">Features:<%= parks[i].features.join(', ') %></li>
+      <hr>
+      <% } %>
+    </ul>
+  </div>
+</div>
+
+<div class="col-md-6">
+  <div class ="row">
+    <div id='map'></div>
+  </div>
+</div>
+
+<script>
+  var myPoints = <%- JSON.stringify(parks) %>;
+  drawMap(myPoints)
+</script>
+</div>
+</div>
+
+
+<br>
+
+<% include ../partials/footer %>
+

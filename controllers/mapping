@@ -1,0 +1,28 @@
+tools:
+
+leaflet
+mapbox
+google maps
+Modest maps
+
+
+set up geocoder if you don't already have latitude and longitude:
+
+geocoder npm install --save geocoder
+
+
+download mapbox for eg
+
+include mapbox js and mapbox css in parks.js
+use access token
+
+var map = L.map('map')
+.addLayter(mapboxTiles)
+.setView([51.5, -0.09], 15);
+
+L.marker([51.5, -0.09]).addTo(map).bindPopup('A pretty CSS3 popup.  <br> Easily customizable.')
+
+
+style: aidamengistu.1dd0b6b1
+
+key: pk.eyJ1IjoiYWlkYW1lbmdpc3R1IiwiYSI6ImZXX096a1kifQ.6nKBGs41b-GQoi8rSn6FPg
