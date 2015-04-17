@@ -291,3 +291,9 @@ h2 {
  input[type="checkbox"]:focus{
     outline:0;
     }
+
+  #nophotoerror {
+    color: #FFFFFF;
+    font-style: italic;
+    font-weight: lighter;
+  }

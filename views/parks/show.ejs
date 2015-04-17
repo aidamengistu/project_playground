@@ -6,9 +6,13 @@
   <br>
   <label id="parkaddress"><%= park.address %></label>
   <br><br>
+  <% if (result.photos.photo.length === 0) { %>
+    <label id="nophotoerror"> [no images to display] </label>
+  <% } else { %>
   <img src="<%= result.photos.photo[0].url_q %>">
   <img src="<%= result.photos.photo[1].url_q %>">
   <img src="<%= result.photos.photo[2].url_q %>">
+  <% } %>
   <br><br>
   <label id="parkfeatures">Features:<%= park.parkfeatures.map(function(p){return p.feature;}).join(', ') %></label>
   <br><br>
