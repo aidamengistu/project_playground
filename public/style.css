@@ -48,6 +48,7 @@ h6.header {
 .chk {
   margin-right: 10px;
   font-weight: normal;
+
 }
 
 .navbar {
@@ -259,7 +260,7 @@ h2 {
 /*checkboxes on front page*/
 .chk input {
   margin-right: 10px;
-  background-color: #D3D3D3;
+  background-color: #D3D3D3 !important;
 }
 
 /*login message in the header*/
@@ -286,3 +287,7 @@ h2 {
   margin-bottom: 20px;
   box-shadow: 4px 4px #515151;
 }
+
+ input[type="checkbox"]:focus{
+    outline:0;
+    }
