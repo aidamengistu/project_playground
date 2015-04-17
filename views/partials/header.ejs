@@ -34,11 +34,18 @@
       <li><a href="/aboutme" class="navbar-about">About</a></li>
     </ul>
 
-    <form class="navbar-form navbar-right" method="post" action="/auth/login">
+    <form class="navbar-form navbar-right" method="post" action="/auth">
       <div class="form-group">
+      <% if (!currentUser){ %>
+
         <input type="text" class="form-control" placeholder="Enter your e-mail" name="email">
         <input type="password" class="form-control" placeholder="Password" name="password">
-        <input type="submit" value="log in" class="loginBtn">
+        <input type="submit" value="log in" class="btn btn" id="loginBtn">
+       <% } else { %>
+       <label class="loginmsg">Welcome back, <%= currentUser.username %>!</label>
+        <a href="/auth/logout" class="btn btn" id="logout">Log out</a>
+
+       <% } %>
       </div>
     </form>
 

@@ -5,6 +5,8 @@ var authCtrl = require("./controllers/auth");
 var app = express();
 var Flickr = require('flickr').Flickr;
 var db = require('./models');
+var flash = require('connect-flash');
+var session = require('express-session');
 
 
 app.use(bodyParser.urlencoded({extended:false}));
@@ -13,9 +15,26 @@ app.set("view engine", "ejs");
 
 app.use(express.static(__dirname + "/public"));
 
-app.use("/parks",parksCtrl);
+app.use(session({
+  secret:'dsalkfjasdflkjgdfblknbadiadsnkl',
+  resave: false,
+  saveUninitialized: true
+}));
 
-app.use("/auth",authCtrl);
+//custom middleware - is user logged in
+app.use(function(req,res,next){
+  req.getUser = function(){
+    return req.session.user || false;
+  }
+
+  //trigger next middleware
+  next();
+});
+
+app.get('*', function(req,res,next){
+  res.locals.currentUser = req.getUser();
+  next();
+})
 
 app.get("/", function(req,res){
     // db.feature.findAll({attributes:['feature'],group:'feature'}).then(function(data){
@@ -73,5 +92,9 @@ flickr.executeAPIRequest("flickr.photos.search", flickr_params, false, function(
         // app.listen(3000, function(){
         //     console.log("Server started on port 3000....")
         // })
+
+app.use("/parks",parksCtrl);
+
+app.use("/auth",authCtrl);
 
 app.listen(process.env.PORT || 3000)

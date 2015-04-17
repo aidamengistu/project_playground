@@ -1,19 +1,23 @@
 <% include ../partials/header %>
 
-<div class="col-md-6">
+<div class="col-md-7">
   <br><br>
-  <% for (var i = 0; i < parks.length; i++){  %>
-  <label id="parktitle"><%= parks[i].name %></label>
+  <label id="parktitle"><%= park.name %></label>
   <br>
-  <label id="parkaddress"><%= parks[i].address %></label>
+  <label id="parkaddress"><%= park.address %></label>
   <br><br>
-  <label id="parkfeatures">Features:<%= parks[i].features.join(', ') %></label>
+  <img src="<%= result.photos.photo[0].url_q %>">
+  <img src="<%= result.photos.photo[1].url_q %>">
+  <img src="<%= result.photos.photo[2].url_q %>">
   <br><br>
-  <label id="parkwebsite">Official website: <a href="<%= parks[i].website %>"><%= parks[i].website %></a></label>
-  <% } %>
+  <label id="parkfeatures">Features:<%= park.parkfeatures.map(function(p){return p.feature;}).join(', ') %></label>
+  <br><br>
+  <label id="parkwebsite">Official website: <a href="<%= park.website %>"><%= park.website %></a></label>
+
   <br>
   <br>
   <br>
+
 
   <hr>
   <table class="reviews-table">
@@ -27,13 +31,18 @@
 
   <form class="form reviews" action="/parks/<%= parkId %>/reviews" method="post">
     <textarea class="form-control" name="comments" rows="10" Placeholder="Write a review"></textarea>
+   <% if (currentUser){ %>
     <button class="btn btn-default submitreview" type="submit">Submit review</button>
+        <% } else { %>
+       <label id="loginforreview">Please login to write a review.</label>
+       <% } %>
   </form></td></tr>
 
 </div>
 
 
-<div class="col-md-6">
+<div class="col-md-5">
+<br><br>
   <div class ="row">
     <div id='map'></div>
   </div>
@@ -41,7 +50,7 @@
 
 
 <script>
-  var myPoints = <%- JSON.stringify(parks) %>;
+  var myPoints = <%- JSON.stringify([park]) %>;
   drawMap(myPoints)
 </script>
 </div>

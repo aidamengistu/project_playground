@@ -2,8 +2,10 @@ var express = require("express");
 var router = express.Router();
 var db = require('../models');
 var async = require('async');
+var Flickr = require('flickr').Flickr;
 
-// GET /parks   (optionally ?type=baseball  and/or  ?parkname=green)
+
+// GET /parks   to show all parks by search feature(optionally ?type=baseball  and/or  ?parkname=green)
 router.get('/',function(req,res){
 
   var type = req.query.type;
@@ -35,41 +37,47 @@ router.get('/',function(req,res){
 });
 
 
-// GET /parks/5  (would show the park with an id of 5)
-// router.get("/:id", function(req,res){
-//   var parkId = req.params.id;
-//   db.park.findAll({where: {id:parkId}}).then(function(data){
-//     res.render("parks/show",{data:data});
-//   })
-// })
 
-
+// GET to show one particular park:
 router.get('/:id',function(req,res){
 
   var parkId = req.params.id;
 
 
-  db.park.findAll({
+  db.park.find({
     where:{id:parkId},
     include:[{
-      model:db.parkfeature,
-      required: true,
+      model:db.parkfeature
     }]
-  }).then(function(parks){
+  }).then(function(park){
 
-    async.map(parks,function(park,callback){
-      park.getParkfeatures().then(function(features){
-        park.features=features.map(function(feature){
-          return feature.feature;
-        });
-        callback(null,park);
-      })
-    },function(err,results){
       db.review.findAll({where:{parkId:parkId}}).then(function(comments){
-      res.render("parks/show",{parks:results, parkId:parkId, comments:comments});
-      })
+
+        var flickr = new Flickr(process.env.FLICKR_KEY, process.env.FLICKR_SECRET);
+
+        var flickr_params = {
+            text: park.name+' Seattle',
+            media: "photos",
+            per_page: 25,
+            page: 1,
+            extras: "url_q, url_z, url_b, owner_name"
+        };
+
+        flickr.executeAPIRequest("flickr.photos.search", flickr_params, false, function(err, result) {
+            // Show the error if we got one
+            if(err) {
+                res.send('flickr error');
+                console.log("FLICKR ERROR: ", err);
+            }else{
+              // res.send(result);
+              res.render("parks/show",{park:park, parkId:parkId, comments:comments, result:result});
+            }
+              // console.log(result.photos);
+          });
     })
+
   });
+
 
 
   // res.send('this is the park page for park with id ' + req.params.id);
