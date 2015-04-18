@@ -3,6 +3,7 @@ var router = express.Router();
 var db = require('../models');
 var async = require('async');
 var Flickr = require('flickr').Flickr;
+var flash = require('connect-flash');
 
 
 // GET /parks   to show all parks by search feature(optionally ?type=baseball  and/or  ?parkname=green)

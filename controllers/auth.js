@@ -2,6 +2,8 @@ var express = require("express");
 var router = express.Router();
 var db = require('../models');
 var bcrypt = require('bcrypt');
+var flash = require('connect-flash');
+
 
 router.get('/signup',function(req,res){
   res.render('signup');
@@ -20,7 +22,10 @@ router.post('/signup',function(req,res){
     if(created){
       res.redirect('/auth/signup/thanks');
     } else {
-      res.send('username already exists')
+      // res.send('username already exists')
+      req.flash('danger', 'username already exists');
+      res.redirect(req.headers.referer);
+
     }
   }).catch(function(error){
     console.log('error',error);
@@ -52,12 +57,15 @@ router.post('/',function(req,res){
        res.redirect(req.headers.referer);
 
      }else{
-       res.send("Invalid password")
+       // res.send("Invalid password")
+    req.flash('danger','Invalid password')
+    res.redirect(req.headers.referer);
+
      }
    })
-
    }else{
-     res.send('Unknown username')
+     res.flash('danger','Unknown username')
+     res.redirect(req.headers.referer);
    }
    // res.redirect('/');
    // console.log(req.headers);
@@ -75,6 +83,8 @@ router.get('/logout',function(req,res){
  // });
 //GET /auth/logout
 //logout logged in user
+
+
 
 
 module.exports = router;

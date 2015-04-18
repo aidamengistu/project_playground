@@ -5,8 +5,8 @@ var authCtrl = require("./controllers/auth");
 var app = express();
 var Flickr = require('flickr').Flickr;
 var db = require('./models');
-var flash = require('connect-flash');
 var session = require('express-session');
+var flash = require('connect-flash');
 
 
 app.use(bodyParser.urlencoded({extended:false}));
@@ -21,12 +21,26 @@ app.use(session({
   saveUninitialized: true
 }));
 
+app.use(flash());
+
+//custom middleware for alerts
+app.use(function(req,res,next){
+
+  //gets alerts (if any) from flash
+  //attach them to res.locals
+  //things in res.locals these will be passed
+  //to the view (ejs) when you do res.render
+  res.locals.alerts=req.flash();
+
+  //trigger next middleware
+  next();
+})
+
 //custom middleware - is user logged in
 app.use(function(req,res,next){
   req.getUser = function(){
     return req.session.user || false;
   }
-
   //trigger next middleware
   next();
 });
@@ -92,6 +106,7 @@ flickr.executeAPIRequest("flickr.photos.search", flickr_params, false, function(
         // app.listen(3000, function(){
         //     console.log("Server started on port 3000....")
         // })
+
 
 app.use("/parks",parksCtrl);
 
