@@ -6,7 +6,7 @@ var Flickr = require('flickr').Flickr;
 var flash = require('connect-flash');
 
 
-// GET /parks   to show all parks by search feature(optionally ?type=baseball  and/or  ?parkname=green)
+// GET /parks   to show all parks by search feature
 router.get('/',function(req,res){
 
   var type = req.query.type;
@@ -52,57 +52,47 @@ router.get('/:id',function(req,res){
     }]
   }).then(function(park){
 
-      db.review.findAll({where:{parkId:parkId}}).then(function(comments){
+    db.review.findAll({where:{parkId:parkId}}).then(function(comments){
 
-        var flickr = new Flickr(process.env.FLICKR_KEY, process.env.FLICKR_SECRET);
+      var flickr = new Flickr(process.env.FLICKR_KEY, process.env.FLICKR_SECRET);
 
-        var flickr_params = {
-            text: park.name+' Seattle',
-            media: "photos",
-            per_page: 25,
-            page: 1,
-            extras: "url_q, url_z, url_b, owner_name"
-        };
+      var flickr_params = {
+        text: park.name+' Seattle',
+        media: "photos",
+        per_page: 25,
+        page: 1,
+        extras: "url_q, url_z, url_b, owner_name"
+      };
 
-        flickr.executeAPIRequest("flickr.photos.search", flickr_params, false, function(err, result) {
+      flickr.executeAPIRequest("flickr.photos.search", flickr_params, false, function(err, result) {
             // Show the error if we got one
+
             if(err) {
-                res.send('flickr error');
-                console.log("FLICKR ERROR: ", err);
+              res.send('flickr error');
+              console.log("FLICKR ERROR: ", err);
             }else{
               // res.send(result);
               res.render("parks/show",{park:park, parkId:parkId, comments:comments, result:result});
             }
               // console.log(result.photos);
-          });
+            });
     })
-
   });
-
-
-
-  // res.send('this is the park page for park with id ' + req.params.id);
-
-  //res.render  show page (full park details of a single park)
-
-  //have to pass "parkId" in res.render for this to work
-  //<form action="/parks/<%= parkId %>/reviews" method="post">
 })
 
 
 //create a review
 //POST /parks/5/reviews   (creates a review for park # 5)
 router.post("/:id/reviews", function(req,res){
-    var parkId = req.params.id;
-    var comments = req.body.comments;
+  var parkId = req.params.id;
+  var comments = req.body.comments;
 
   db.review.create({comments:comments, parkId:parkId}).then(function(comment){
-  res.redirect("/parks/" + parkId);
+    res.redirect("/parks/" + parkId);
   })
-  })
-  //add new review
-  //redirect back to park page
-// })
+})
+
+
 
 
 

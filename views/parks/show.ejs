@@ -2,18 +2,22 @@
 
 <div class="col-md-7">
 
+  <!-- To display one particular park and its features as well as its Flickr pictures -->
   <br><br>
   <label id="parktitle"><%= park.name %></label>
   <br>
   <label id="parkaddress"><%= park.address %></label>
   <br><br>
   <% if (result.photos.photo.length === 0) { %>
-    <label id="nophotoerror"> [no images to display] </label>
+  <label id="nophotoerror"> [no images to display] </label>
   <% } else { %>
-  <img src="<%= result.photos.photo[0].url_q %>">
-  <img src="<%= result.photos.photo[1].url_q %>">
-  <img src="<%= result.photos.photo[2].url_q %>">
+  <%for (var j = 0; j < Math.ceil(result.photos.photo.length/3); j++) { %>
+  <img src="<%= result.photos.photo[j].url_q %>">
   <% } %>
+
+  <% } %>
+
+
   <br><br>
   <label id="parkfeatures">Features:<%= park.parkfeatures.map(function(p){return p.feature;}).join(', ') %></label>
   <br><br>
@@ -25,29 +29,30 @@
 
 
   <hr>
+  <!-- To display the reviews -->
   <table class="reviews-table">
-  <h3>Reviews:</h3>
-  <br>
-  <% for (var j = 0; j < comments.length; j++){ %>
-  <tr><td class="reviewrow"><%= comments[j].comments %></td></tr>
-  <% } %>
+    <h3>Reviews:</h3>
+    <br>
+    <% for (var j = 0; j < comments.length; j++){ %>
+    <tr><td class="reviewrow"><%= comments[j].comments %></td></tr>
+    <% } %>
   </table>
   <br><br>
 
   <form class="form reviews" action="/parks/<%= parkId %>/reviews" method="post">
     <textarea class="form-control" name="comments" rows="10" Placeholder="Write a review"></textarea>
-   <% if (currentUser){ %>
+    <% if (currentUser){ %>
     <button class="btn btn-default submitreview" type="submit">Submit review</button>
-        <% } else { %>
-       <label id="loginforreview">Please login to write a review.</label>
-       <% } %>
+    <% } else { %>
+    <label id="loginforreview">Please login to write a review.</label>
+    <% } %>
   </form></td></tr>
 
 </div>
 
 
 <div class="col-md-5">
-<br><br>
+  <br><br>
   <div class ="row">
     <div id='map'></div>
   </div>

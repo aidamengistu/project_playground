@@ -51,29 +51,17 @@ app.get('*', function(req,res,next){
 })
 
 app.get("/", function(req,res){
-    // db.feature.findAll({attributes:['feature'],group:'feature'}).then(function(data){
-    //     res.render("index", {data:data});
-    // })
 
-    // db.parkfeature.findAll().then(function(features){
-    //     res.render('index',{data:features});
-    // })
-
-db.parkfeature.findAll({
-  where:{
-    $not:{
-      id:[8,9]
-  }
-}
-}).then(function(features){
+  db.parkfeature.findAll({
+    where:{
+      $not:{
+        id:[8,9]
+      }
+    }
+  }).then(function(features){
     res.render('index',{data:features});
-});
+  });
 
-//   var parkId = req.query.id;
-
-// db.park.findAll({where:{id:parkId}}).then(function(park){
-//   res.send('index',{park:park})
-// });
 })
 
 
@@ -84,22 +72,22 @@ app.get("/aboutme", function(req,res){
 var flickr = new Flickr(process.env.FLICKR_KEY, process.env.FLICKR_SECRET);
 
 var flickr_params = {
-    text: "Discovery+Park+Seattle",
-    media: "photos",
-    per_page: 25,
-    page: 1,
-    extras: "url_q, url_z, url_b, owner_name"
+  text: "Discovery+Park+Seattle",
+  media: "photos",
+  per_page: 25,
+  page: 1,
+  extras: "url_q, url_z, url_b, owner_name"
 };
 
 flickr.executeAPIRequest("flickr.photos.search", flickr_params, false, function(err, result) {
         // Show the error if we got one
         if(err) {
-            console.log("FLICKR ERROR: " + err);
+          console.log("FLICKR ERROR: " + err);
 
-            return;
+          return;
         }
           // console.log(result.photos);
-      });
+        });
 
         // Do something with flicker photos
 
@@ -111,5 +99,19 @@ flickr.executeAPIRequest("flickr.photos.search", flickr_params, false, function(
 app.use("/parks",parksCtrl);
 
 app.use("/auth",authCtrl);
+
+app.get ('*', function(req, res, next){
+  var err = new Error();
+  err.status = 404;
+  next(err);
+})
+
+app.use(function(err, req, res, next){
+  if(err.status !== 404){
+    return next();
+  }
+
+  res.send(err.message||'** Sorry that page does not exist **');
+})
 
 app.listen(process.env.PORT || 3000)
