@@ -19,4 +19,6 @@ var drawMap = function(markers) {
     L.marker([marker.latitude, marker.longitude]).addTo(map).bindPopup(marker.name)
    })
 
+   map.scrollWheelZoom.disable();
+
 }
