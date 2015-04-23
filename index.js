@@ -110,8 +110,8 @@ app.use(function(err, req, res, next){
   if(err.status !== 404){
     return next();
   }
-
-  res.send(err.message||'** Sorry that page does not exist **');
+    res.render("error");
+  // res.send(err.message||'** Sorry that page does not exist **');
 })
 
 app.listen(process.env.PORT || 3000)
